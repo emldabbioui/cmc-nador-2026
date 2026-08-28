@@ -1,16 +1,19 @@
 import streamlit as st
 import pandas as pd
-import os
 
+# 1. Établissement de la configuration de l'application
 st.set_page_config(page_title="CMC Nador - Évaluation Diagnostique 2026-2027", page_icon="🧠", layout="wide")
 
-DATA_FILE = "cmc_diagnostique_2026.csv"
-if not os.path.exists(DATA_FILE):
-    df_empty = pd.DataFrame(columns=["Nom Complet", "Niveau", "Groupe", "Extraversion", "Agreeableness", "Conscientiousness", "Neuroticism", "Openness"])
-    df_empty.to_csv(DATA_FILE, index=False, encoding='utf-8-sig')
+# 2. Gestion de la base de données via la mémoire Session State (Optimisé pour le Cloud en ligne)
+if "df_data" not in st.session_state:
+    st.session_state.df_data = pd.DataFrame(columns=["Nom Complet", "Niveau", "Groupe", "Extraversion", "Agreeableness", "Conscientiousness", "Neuroticism", "Openness"])
 
+# Système de navigation latérale
 page = st.sidebar.radio("Navigation / التنقل:", ["📝 Espace Stagiaire (التقويم التشخيصي)", "🔐 Tableau de Bord Formateur (الاستراتيجيات)"])
 
+# ==========================================
+# 📝 Partie I : Formulaire Stagiaire et Profil Instantané
+# ==========================================
 if page == "📝 Espace Stagiaire (التقويم التشخيصي)":
     st.title("📊 CMC Nador - Évaluation Diagnostique (Rentrée 2026-2027)")
     st.subheader("Filière: Finance et Comptabilité (GEOCF)")
@@ -61,9 +64,10 @@ if page == "📝 Espace Stagiaire (التقويم التشخيصي)":
                 score_n = (q7 + (6 - q8)) / 2
                 score_o = (q9 + (6 - q10)) / 2
                 
+                # Injection sécurisée dans le Session State en ligne
                 new_row = pd.DataFrame([[nom, niveau, groupe, score_e, score_a, score_c, score_n, score_o]], 
                                         columns=["Nom Complet", "Niveau", "Groupe", "Extraversion", "Agreeableness", "Conscientiousness", "Neuroticism", "Openness"])
-                new_row.to_csv(DATA_FILE, mode='a', header=False, index=False, encoding='utf-8-sig')
+                st.session_state.df_data = pd.concat([st.session_state.df_data, new_row], ignore_index=True)
                 
                 st.balloons()
                 st.success(f"🎉 Vos réponses ont été transmises avec succès !")
@@ -94,6 +98,9 @@ if page == "📝 Espace Stagiaire (التقويم التشخيصي)":
                     if score_n >= 3.5:
                         st.warning("⚠️ **Gestion du Stress :** Le monde de la finance connaît des périodes intenses (périodes d'inventaire, clôtures fiscales). Entraînez-vous dès maintenant à gérer les délais courts pour ne pas perdre vos moyens lors de votre future insertion professionnelle.")
 
+# ==========================================
+# 🔐 Partie II : Tableau de Bord Formateur et Détection des Risques Comportementaux
+# ==========================================
 elif page == "🔐 Tableau de Bord Formateur (الاستراتيجيات)":
     st.title("🔐 Espace d'Ingénierie Pédagogique - Rentrée 2026-2027")
     
@@ -101,7 +108,9 @@ elif page == "🔐 Tableau de Bord Formateur (الاستراتيجيات)":
     
     if password == "CMC_Nador_2026":
         st.success("🔓 Accès autorisé. Modèles de prédiction comportementale actifs.")
-        df = pd.read_csv(DATA_FILE, encoding='utf-8-sig')
+        
+        # Récupération de la base dynamique stockée en mémoire
+        df = st.session_state.df_data
         
         if df.empty:
             st.info("📂 Aucune donnée disponible pour le moment. En attente des réponses des stagiaires.")
@@ -124,7 +133,7 @@ elif page == "🔐 Tableau de Bord Formateur (الاستراتيجيات)":
                 with col_m1: st.metric("Effectif diagnostiqué", len(df_filtered))
                 with col_m2: st.metric("Rigueur Globale (C)", round(moy_c, 2))
                 with col_m3: st.metric("Résistance au Stress", round(6 - moy_n, 2))
-                with col_m4: st.metric("Agilité Numérique / Ouverture (O)", round(moy_o, 2))
+                with col_m4: st.metric("Agilité Numérique (O)", round(moy_o, 2))
                 
                 st.divider()
                 st.markdown("### 🚨 Système d'Alerte Précoce : Profils à Risque de Conflit ou de Blocage")
@@ -135,9 +144,3 @@ elif page == "🔐 Tableau de Bord Formateur (الاستراتيجيات)":
                     if row['Agreeableness'] <= 2.5 and row['Extraversion'] >= 3.5:
                         reasons.append("🔴 **Risque de conflit direct :** Forte extraversion combinée à une faible amabilité. Ce stagiaire peut chercher à imposer ses idées de manière agressive lors des travaux d'équipe (ex: Simulations, Audit) et créer des tensions.")
                     if row['Openness'] >= 4.0 and row['Conscientiousness'] <= 2.2:
-                        reasons.append("🔶 **Risque d'indiscipline / Non-respect des règles :** Esprit très libre mais très désorganisé. Risque de refuser de suivre les règles rigides du Plan Comptable Marocain ou des téléprocédures.")
-                    if row['Extraversion'] <= 2.0 and row['Neuroticism'] >= 4.0:
-                        reasons.append("⚠️ **Risque de décrochage caché (Vulnerability) :** Très introverti et extrêmement sensible au stress. Risque de s'effondrer psychologiquement face aux évaluations complexes sans oser demander de l'aide.")
-                    
-                    if reasons:
-                        alerts_found = True
