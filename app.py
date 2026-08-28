@@ -1,50 +1,61 @@
 import streamlit as st
 import pandas as pd
 
-# 1. Configuration de la page
-st.set_page_config(page_title="CMC Nador - Évaluation Diagnostique 2026-2027", page_icon="🧠", layout="wide")
+# 1. إعدادات المنصة العامة
+st.set_page_config(page_title="منصة التسيير والتحليل السيكولوجي البيداغوجي", page_icon="🧠", layout="wide")
 
-# 2. Gestion de la base de données en mémoire vive (Session State) pour le Cloud
+# 2. إدارة ذاكرة تجميع البيانات السحابية
 if "df_data" not in st.session_state:
     st.session_state.df_data = pd.DataFrame(columns=["Nom Complet", "Niveau", "Groupe", "Extraversion", "Agreeableness", "Conscientiousness", "Neuroticism", "Openness"])
 
-# System de navigation
-page = st.sidebar.radio("Navigation / التنقل:", ["📝 Espace Stagiaire (التقويم التشخيصي)", "🔐 Tableau de Bord Formateur (الاستراتيجيات)"])
+# القائمة الجانبية للتنقل
+page = st.sidebar.radio("قائمة التحكم والتنقل:", ["📝 فضاء المتدرب (التقويم التشخيصي)", "🔐 لوحة تحكم الأستاذ (الاستراتيجيات النفسية)"])
 
 # ==========================================
-# 📝 Partie I : Formulaire Stagiaire
+# 📝 الجزء الأول: فضاء المتدرب والتحليل الفردي المعمق
 # ==========================================
-if page == "📝 Espace Stagiaire (التقويم التشخيصي)":
-    st.title("📊 CMC Nador - Évaluation Diagnostique (Rentrée 2026-2027)")
-    st.subheader("Filière: Finance et Comptabilité (GEOCF)")
-    st.write("Bienvenue cher(e) stagiaire. Ce test scientifique évalue votre style de réflexion afin de vous proposer des conseils pédagogiques.")
+if page == "📝 فضاء المتدرب (التقويم التشخيصي)":
+    st.title("📊 مدينة المهن والكفاءات بالناظور - التقويم التشخيصي السيكولوجي")
+    st.subheader("قطاع التسيير والتجارة | شعبة الهندسة المالية والمحاسبة")
+    st.write("عزيزي المتدرب(ة)، الإجابة الصادقة والموضوعية على هذا الاختبار العلمي تمنحك تحليلاً دقيقاً لسماتك الشخصية، وتساعد أستاذك على تصميم استراتيجيات تعليمية تتوافق تماماً مع نمط تفكيرك.")
     
     with st.form("diagnostique_form"):
         col1, col2, col3 = st.columns(3)
         with col1:
-            nom = st.text_input("Nom et Prénom (الاسم الكامل):")
+            nom = st.text_input("الاسم الكامل (Nom et Prénom):")
         with col2:
-            niveau = st.selectbox("Votre Niveau Actuel (مستواك الحالي):", ["1ère année Tronc Commun", "2ème année TSGEOCF", "3ème année TSGEOCF"])
+            niveau = st.selectbox("المستوى الدراسي الحالي:", ["السنة الأولى - جذع مشترك", "السنة الثانية - تخصص الهندسة المالية والمحاسبة", "السنة الثالثة - تخصص الهندسة المالية والمحاسبة"])
         with col3:
-            groupe = st.text_input("Groupe / Section (الفوج):")
+            groupe = st.text_input("الفوج / القسم (Groupe):")
             
         st.divider()
-        q1 = st.slider("1. Dans un groupe, je prends facilement la parole.", 1, 5, 3)
-        q2 = st.slider("2. Je préfère travailler seul sur un projet complexe.", 1, 5, 3)
-        q3 = st.slider("3. J'éprouve un réel plaisir à expliquer une notion difficile.", 1, 5, 3)
-        q4 = st.slider("4. Je pense que chacun doit se débrouiller seul pour réussir.", 1, 5, 3)
-        q5 = st.slider("5. Je suis très pointilleux avec les chiffres et les détails.", 1, 5, 3)
-        q6 = st.slider("6. J'improvise souvent في عملي وتخطيطي.", 1, 5, 3)
-        q7 = st.slider("7. Je perds facilement mes moyens face à un exercice inconnu.", 1, 5, 3)
-        q8 = st.slider("8. Je garde mon calme ومستعد للعمل تحت الضغط.", 1, 5, 3)
-        q9 = st.slider("9. J'adore explorer de nouveaux outils numériques (Logiciels, IA).", 1, 5, 3)
-        q10 = st.slider("10. Je préfère les méthodes d'apprentissage traditionnelles.", 1, 5, 3)
+        st.write("📌 يرجى تحديد مدى انطباق العبارات التالية على سلوكك الحقيقي من 1 (لا تنطبق تماماً) إلى 5 (تنطبق تماماً):")
+        
+        st.markdown("### 🗣️ البُعد الأول: التفاعل والتواصل الاجتماعي (Extraversion)")
+        q1 = st.slider("1. أشعر بالنشاط والحيوية وسط النقاشات الجماعية المفتوحة وأبادر بطرح أفكاري أمام الآخرين.", 1, 5, 3)
+        q2 = st.slider("2. أفضّل معالجة التمارين بمفردي في أجواء هادئة، والتجمعات الكبيرة تستهلك طاقة تركيزي بسرعة.", 1, 5, 3)
+        
+        st.markdown("### 🤝 البُعد الثاني: الانسجام والتعاون والتعاطف (Agreeableness)")
+        q3 = st.slider("3. يسعدني جداً توجيه زملائي وتبسيط المفاهيم الصعبة لهم صيانة لروح التعاون السائدة.", 1, 5, 3)
+        q4 = st.slider("4. أرى أن النجاح مسؤولية فردية، ولا أحب أن تتباطأ وتيرة عملي بسبب مستويات أو انشغالات الآخرين.", 1, 5, 3)
+        
+        st.markdown("### 🎯 البُعد الثالث: الانضباط، الدقة والتيقظ (Conscientiousness)")
+        q5 = st.slider("5. أنا شخص شديد التدقيق في البيانات والأرقام، وتزعجني الأخطاء الناتجة عن السهو واللامبالاة بشكل كبير.", 1, 5, 3)
+        q6 = st.slider("6. أفضّل معالجة المهام بمرونة وعفوية فور بروزها، ولا أحب تقييد حركتي بالجداول والخطط الصارمة.", 1, 5, 3)
+        
+        st.markdown("### ⚖️ البُعد الرابع: التوازن الانفعالي ومقاومة الضغوط (Neuroticism)")
+        q7 = st.slider("7. ينتابني قلق شديد وتوتر يربك مخططاتي عند مواجهة فرض غير متوقع أو مسألة حسابية مجهولة المعالم.", 1, 5, 3)
+        q8 = st.slider("8. أحافظ على ثباتي الانفعالي وبرود أعصابي حتى لو تعقدت الظروف وتراكمت الواجبات في وقت ضيق.", 1, 5, 3)
+        
+        st.markdown("### 💡 البُعد الخامس: الانفتاح الفكري والابتكار الرقمي (Openness)")
+        q9 = st.slider("9. يستهويني البحث عن أدوات تكنولوجية جديدة وبرمجيات متطورة لاستكشاف أساليب عمل حديثة وغير تقليدية.", 1, 5, 3)
+        q10 = st.slider("10. أرتاح للأساليب الكلاسيكية الواضحة والمعتمدة مسبقاً، وأتوجس من التغييرات المتسارعة التي تفرضها التكنولوجيا.", 1, 5, 3)
 
-        submitted = st.form_submit_button("Envoyer et Voir mes Résultats 🚀")
+        submitted = st.form_submit_button("إرسال الإجابات واستخراج التقرير السيكولوجي 🚀")
         
         if submitted:
             if not nom or not groupe:
-                st.error("❌ Veuillez remplir impérativement les champs Nom et Groupe.")
+                st.error("❌ عذراً، يرجى إدخال الاسم والفوج أولاً قبل الإرسال.")
             else:
                 score_e = float(q1 + (6 - q2)) / 2
                 score_a = float(q3 + (6 - q4)) / 2
@@ -52,75 +63,85 @@ if page == "📝 Espace Stagiaire (التقويم التشخيصي)":
                 score_n = float(q7 + (6 - q8)) / 2
                 score_o = float(q9 + (6 - q10)) / 2
                 
+                # حفظ في الذاكرة السحابية التفاعلية للمنصة
                 new_row = pd.DataFrame([[nom, niveau, groupe, score_e, score_a, score_c, score_n, score_o]], columns=["Nom Complet", "Niveau", "Groupe", "Extraversion", "Agreeableness", "Conscientiousness", "Neuroticism", "Openness"])
                 st.session_state.df_data = pd.concat([st.session_state.df_data, new_row], ignore_index=True)
                 
                 st.balloons()
-                st.success("🎉 Vos réponses ont été transmises avec succès !")
+                st.success("🎉 تم تسجيل بياناتك النفسية بنجاح واطلاع أستاذك المكون عليها.")
                 st.divider()
-                st.markdown(f"## 📋 Votre Profil d'Apprentissage, {nom}")
+                st.markdown(f"## 📋 التقرير السيكولوجي الفردي الشامل للمتدرب(ة): {nom}")
                 
                 col_res1, col_res2 = st.columns(2)
                 with col_res1:
-                    st.markdown("### 🎓 Conseils Pédagogiques :")
-                    if score_c <= 2.5:
-                        st.info("💡 **Organisation :** Utilisez des checklists pour valider vos bilans.")
+                    st.markdown("### 🔍 أولاً: التشخيص البنيوي للشخصية")
+                    
+                    # نقاط القوة والضعف لتيقظ الضمير والانضباط المحاسبي
+                    if score_c >= 3.5:
+                        st.markdown("**💪 نقاط القوة:** دقة متناهية في الملاحظة، قدرة عالية على ضبط الحسابات وتفادي الأخطاء المادية، الالتزام بالأمانة والمسؤولية في تنظيم المهام.")
+                        st.markdown("**⚠️ نقاط الضعف المحتملة:** المبالغة في التفكير والتدقيق قد تقودك إلى البطء في تسليم العمل، أو الوقوع في فخ المثالية المفرطة.")
                     else:
-                        st.success("💡 **Rigueur :** Excellente capacité de concentration naturelle.")
+                        st.markdown("**💪 نقاط القوة:** مرونة عالية في التكيف مع المستجدات، سرعة البديهة في إيجاد مخارج بديلة وعفوية عند انسداد الطرق التقليدية.")
+                        st.markdown("**⚠️ نقاط الضعف المحتملة:** ضعف نسبي في التركيز على الجزئيات الحسابية الدقيقة، والميل لتأجيل الواجبات إلى اللحظات الأخيرة.")
+                    
+                    # نقاط القوة والضعف للتواصل والعمل الاجتماعي
+                    if score_e >= 3.5:
+                        st.markdown("**💪 نقاط القوة:** مهارات تواصلية ممتازة، كاريزما القيادة داخل المجموعات، القدرة على التعبير والدفاع عن الأفكار بقوة وثقة.")
+                        st.markdown("**⚠️ نقاط الضعف المحتملة:** التسرع أحياناً في اتخاذ القرارات دون إعطاء وقت كاف للتحليل الفردي الصامت والمراجعة العميقة.")
+                    else:
+                        st.markdown("**💪 نقاط القوة:** عمق فكري وتحليلي متميز، هدوء عالي يساعد على معالجة المشاكل الحسابية المعقدة في صمت وبتركيز شديد.")
+                        st.markdown("**⚠️ نقاط الضعف المحتملة:** التردد في طلب المساعدة أو التعبير عن العقبات بوضوح أمام الزملاء أو المؤطر.")
+                        
                 with col_res2:
-                    st.markdown("### 💼 Conseils Professionnels :")
-                    if score_o >= 3.5:
-                        st.success("🎯 **Atout Métier :** Profil idéal pour l'Audit comptable ou le Conseil fiscal.")
+                    st.markdown("### 🎓 ثانياً: التوجيهات البيداغوجية والمهنية المخصصة")
+                    st.markdown("**💡 الاستراتيجية الدراسية المثالية لك:**")
+                    if score_c <= 2.5:
+                        st.info("يتعين عليك إلزام نفسك باستخدام 'جداول التدقيق والتحقق' (Checklists) لتنظيم المراجعة وتجنب السهو المحاسبي.")
                     else:
-                        st.info("🎯 **Atout Métier :** Profil idéal pour la Gestion de la Paie ou la Comptabilité pure.")
+                        st.success("أنت قادر بامتياز على التعلم الذاتي وحل دراسات الحالة المتكاملة والمعقدة بشكل مستقل، فاستثمر هذا التركيز.")
+                        
+                    st.markdown("**🎯 المسار المهني المستقبلي الأنسب لتركيبتك:**")
+                    if score_o >= 3.5:
+                        st.write("تؤهلك مرونتك الفكرية وعقليتك الاستكشافية للتميز في تخصصات **التدقيق المالي والاستشراف الاستراتيجي والأنظمة الدولية (معايير IAS/IFRS)**.")
+                    else:
+                        st.write("طبيعتك الباحثة عن الوضوح والاستقرار تؤهلك للنجاح الباهر في **إدارة الأجور وتطبيق قوانين الجبايات وإدارة الحسابات الكلاسيكية المستقرة**.")
 
 # ==========================================
-# 🔐 Partie II : Tableau de Bord Formateur
+# 🔐 الجزء الثاني: لوحة تحكم الأستاذ - الهندسة البيداغوجية المعمقة
 # ==========================================
-elif page == "🔐 Tableau de Bord Formateur (الاستراتيجيات)":
-    st.title("🔐 Espace d'Ingنيerie Pédagogique - Rentrée 2026-2027")
-    password = st.text_input("Code d'accès secret :", type="password")
+elif page == "🔐 لوحة تحكم الأستاذ (الاستراتيجيات النفسية)":
+    st.title("🔐 الفضاء التربوي السري للأستاذ المكون الباحث")
+    password = st.text_input("الرجاء إدخال الرمز السري للولوج إلى هندسة الفوج व्यवहार:", type="password")
     
     if password == "CMC_Nador_2026":
-        st.success("🔓 Accès autorisé.")
+        st.success("🔓 تم تأكيد الهوية بنجاح. خوارزميات التشخيص التربوي نشطة.")
         df = st.session_state.df_data
         
         if df.empty:
-            st.info("📂 Aucune donnée disponible pour le moment. En attente des réponses des stagiaires.")
+            st.info("📂 لا توجد أي بيانات حالياً. في انتظار قيام متدربي مدينة المهن والكفاءات بملء الاستمارة التشخيصية.")
         else:
-            niveau_select = st.selectbox("Sélectionnez le groupe à analyser:", ["1ère année Tronc Commun", "2ème année TSGEOCF", "3ème année TSGEOCF"])
+            niveau_select = st.selectbox("اختر الفوج الدراسي المستهدف بالتحليل والهندسة:", ["السنة الأولى - جذع مشترك", "السنة الثانية - تخصص الهندسة المالية والمحاسبة", "السنة الثالثة - تخصص الهندسة المالية والمحاسبة"])
             df_filtered = df[df["Niveau"] == niveau_select]
             
             if df_filtered.empty:
-                st.warning("Aucun stagiaire enregistré dans ce niveau pour le moment.")
+                st.warning("لم يقم أي متدرب من هذا الفوج بملء الاستمارة حتى الآن.")
             else:
-                st.subheader(f"📊 Analyse Globale du Groupe : {niveau_select}")
+                st.subheader(f"📊 التحليل الإحصائي السيكولوجي العميق للفوج: {niveau_select}")
+                
+                # حساب المعدلات المعيارية السيكولوجية للفصل
                 moy_e = df_filtered["Extraversion"].mean()
+                moy_a = df_filtered["Agreeableness"].mean()
                 moy_c = df_filtered["Conscientiousness"].mean()
                 moy_n = df_filtered["Neuroticism"].mean()
                 moy_o = df_filtered["Openness"].mean()
                 
                 col_m1, col_m2, col_m3, col_m4 = st.columns(4)
-                with col_m1: st.metric("Effectif diagnostiqué", len(df_filtered))
-                with col_m2: st.metric("Rigueur Globale (C)", round(moy_c, 2))
-                with col_m3: st.metric("Résistance au Stress", round(6 - moy_n, 2))
-                with col_m4: st.metric("Agilité Numérique (O)", round(moy_o, 2))
+                with col_m1: st.metric("إجمالي المتدربين المسجلين بالفوج", len(df_filtered))
+                with col_m2: st.metric("مؤشر الانضباط والدقة العام (C)", round(moy_c, 2))
+                with col_m3: st.metric("مؤشر الاستقرار النفسي العام", round(6 - moy_n, 2))
+                with col_m4: st.metric("مؤشر القابلية الرقمية والابتكار (O)", round(moy_o, 2))
                 
                 st.divider()
-                st.markdown("### 🎯 Stratégie Pédagogique Globale pour le Groupe (Tendances Mondiales 2026)")
-                if "2ème année" in niveau_select:
-                    st.write("• **Pratique de la paie & Comptabilité Approfondie :** Utilisez le *Micro-learning* si la rigueur globale est faible.")
-                    st.write("• **Bureautique Avancée :** Intégrez la *Gamification* (Défis Excel).")
-                elif "3ème année" in niveau_select:
-                    st.write("• **Audit & Télédéclarations :** Appliquez l'*Erreur Apprenante* sur plateforme sandbox.")
-                    st.write("• **Normes IAS/IFRS :** Utilisez la *Classe Inversée*.")
                 
-                st.divider()
-                st.markdown("### 📋 Liste des Profils Diagnostiqués")
-                st.dataframe(df_filtered)
-                
-                csv_data = df_filtered.to_csv(index=False).encode('utf-8-sig')
-                st.download_button(label="📥 Télécharger la base", data=csv_data, file_name="Diagnostique.csv")
-                
-    elif password != "":
-        st.error("❌ Code d'accès secret incorrect.")
+                # ----------------------------------------------------
+                # أ: التحليل النفسي المعمق لكل متدرب على حدة مع الإنذارات السلوكية لقضايا الفصل
